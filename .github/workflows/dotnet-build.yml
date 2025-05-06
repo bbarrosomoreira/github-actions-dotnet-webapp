@@ -1,0 +1,29 @@
+name: Dotnet Build workflow
+
+on: 
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+    
+    - name: Configurar .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restaurar dependências
+      run: dotnet restore github4women/github4women.csproj
+
+    - name: Compilar projeto
+      run: dotnet build github4women/github4women.csproj --no-restore
+
+    - name: Mensagem personalizada
+      run: echo "Workflow executado com sucesso via push ou agendamento"
